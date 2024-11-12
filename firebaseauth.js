@@ -42,7 +42,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
         } catch (error) {
             showMessage(`Error creating user: ${error.message}`, "signUpMessage");
         }
-    }
+    } 
 
    
 
@@ -78,11 +78,18 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
         const btn =document.getElementById("msg-btn")
 
         // Validation
-        if (username.length < 3) {
+       
+        if(username.length===0){
+            showMessage("Please fill this field","UserNameError");
+        }
+      if (username.length <3) {
             showMessage("Username must be at least 3 characters", "UserNameError");
-        } else if (password.length < 8 || !/^(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
+        } if(password.length===0){
+            showMessage("Please fill out this field","PasswordError");
+        }
+         if (password.length < 8 || !/^(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
             showMessage("Password must be at least 8 characters and contain a number and a special character", "PasswordError");
-        } else if (password !== confirmPassword) {
+        }  if (password !== confirmPassword) {
             showMessage("Passwords do not match", "ConfirmPasswordError");
         } else {
             signUpWithUsername(username, password);
@@ -101,3 +108,5 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
             loginWithUsername(username, password);
         }
     });
+
+   
