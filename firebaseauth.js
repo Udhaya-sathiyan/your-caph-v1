@@ -25,33 +25,45 @@ function showMessage(message, elementId, color = "red") {
 }
 
 // Sign Up Function
-async function signUpWithUsername(username, password) {
-    const email = `${username}@yourdomain.com`;
+async function signUpWithUsername(username, password,email) {
     const usernameRef = doc(db, "usernames", username);
+    const userRef = doc(db, "users", email); // Create a `users` collection to store user details
     const usernameSnap = await getDoc(usernameRef);
 
     if (usernameSnap.exists()) {
-        showMessage("Username already taken", "signUpMessage");
+        showMessage("You already signedup.Please login");
         return;
     }
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+
+        // Store username in the 'usernames' collection
         await setDoc(usernameRef, { uid: user.uid });
+
+        // Store additional user details in the 'users' collection
+        await setDoc(userRef, {
+            uid: user.uid,
+            username: username,
+            email: email,
+        });
+        localStorage.setItem("userName",username)
         showMessage("Account created successfully!", "signUpMessage", "green");
+        window.location.href = "homepage.html"; // Ensure this page exists
     } catch (error) {
         showMessage(`Error creating user: ${error.message}`, "signUpMessage");
     }
 }
 
+
 // Login Function
-async function loginWithUsername(username, password) {
-    const email = `${username}@yourdomain.com`;
+async function loginWithUsername( password,email) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         showMessage("Login successful!", "loginMessage", "green");
-        window.location.href = "homepage.html";
+        localStorage.setItem("email",email)
+        window.location.href = "homepage.html"; // Ensure this page exists
     } catch (error) {
         showMessage(`Login error: ${error.message}`, "loginMessage");
     }
@@ -81,10 +93,10 @@ document.getElementById("confirmPassword").addEventListener("input", () => {
     document.getElementById("ConfirmPasswordError").textContent = "";
 });
 
-// Clear error message when user starts typing in login form
-document.getElementById("loginUsername").addEventListener("input", () => {
-    document.getElementById("usernameError").textContent = "";
-});
+// // Clear error message when user starts typing in login form
+// document.getElementById("loginUsername").addEventListener("input", () => {
+//     document.getElementById("usernameError").textContent = "";
+// });
 
 document.getElementById("loginPassword").addEventListener("input", () => {
     document.getElementById("passwordError").textContent = "";
@@ -94,6 +106,7 @@ document.getElementById("loginPassword").addEventListener("input", () => {
 document.getElementById("signUpForm").addEventListener("submit", (event) => {
     event.preventDefault();
     const username = document.getElementById("signUpUsername").value.trim();
+    const email = document.getElementById("signUpEmail").value.trim();
     const password = document.getElementById("signUpPassword").value.trim();
     const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
@@ -105,6 +118,10 @@ document.getElementById("signUpForm").addEventListener("submit", (event) => {
         hasErrors = true;
     } else if (username.length < 3) {
         showMessage("Username must be at least 3 characters", "UserNameError");
+        hasErrors = true;
+    }
+    else if(username.length>8){
+        showMessage("Username can not exceed 15 characters");
         hasErrors = true;
     }
 
@@ -123,19 +140,21 @@ document.getElementById("signUpForm").addEventListener("submit", (event) => {
 
     // Call signUpWithUsername only if there are no errors
     if (!hasErrors) {
-        signUpWithUsername(username, password);
+        signUpWithUsername(username, password,email);
     }
 });
 
 // Handle Login form
 document.getElementById("loginForm").addEventListener("submit", (event) => {
     event.preventDefault();
-    const username = document.getElementById("loginUsername").value.trim();
+    // const username = document.getElementById("loginUsername").value.trim();
     const password = document.getElementById("loginPassword").value.trim();
+    const email = document.getElementById("loginEmail").value.trim();
 
-    if (!username || !password) {
+
+    if ( !password) {
         showMessage("Please fill out all fields", "loginMessage");
     } else {
-        loginWithUsername(username, password);
+        loginWithUsername( password,email);
     }
 });

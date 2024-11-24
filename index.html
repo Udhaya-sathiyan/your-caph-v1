@@ -13,9 +13,14 @@
 
 
 <form id="loginForm" style="display: block; margin-bottom: 20px;" novalidate>
-    <label for="loginUsername">Username:</label>
+    <!-- <label for="loginUsername">Username:</label>
     <input type="text" id="loginUsername" required>
-    <span id="usernameError" style="color: red;"></span>
+    <span id="usernameError" style="color: red;"></span> -->
+
+    <label for="loginEmail">Email:</label>
+    <input type="email" id="loginEmail" required>
+    <span id="emailError" style="color: red;"></span>
+
 
     <label for="loginPassword">Password:</label>
     <input type="password" id="loginPassword" required>
@@ -37,6 +42,11 @@
     <label for="signUpUsername">Username:</label>
     <input type="text" id="signUpUsername" required>
     <span id="UserNameError" style="color: red;"></span>
+
+    <label for="signUpEmail">Email:</label>
+    <input type="email" id="signUpEmail" required>
+    <span id="emailError" style="color: red;"></span>
+    
 
     <label for="signUpPassword">Password:</label>
     <input type="password" id="signUpPassword" required>

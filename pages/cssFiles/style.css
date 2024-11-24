@@ -221,6 +221,31 @@ header img {
     left: 20px;
     height: 75px;
 }
+/* Increase the width and padding for email input fields */
+input[type="email"] {
+    width: 100%;            /* Full width of its container */
+    padding: 12px;          /* Increase padding for better height */
+    font-size: 16px;        /* Make text inside the input bigger */
+    margin-bottom: 15px;    /* Space below the input */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px;     /* Rounded corners */
+}
+
+.signUpEmail {
+    margin-bottom: 20px;    /* Add more space between email and other fields */
+}
+ .emailError {
+    font-size: 12px;
+    color: red;
+}
+
+/* Adjust the width for wider email box */
+input[type="email"].wide {
+    width: 100%;            /* Ensure it occupies full container width */
+    padding: 15px;          /* Increased padding for larger height */
+    font-size: 18px;        /* Bigger font size for better readability */
+}
+
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 400px) {

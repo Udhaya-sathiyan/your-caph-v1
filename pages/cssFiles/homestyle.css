@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-     background-color: #daf4fe;
+     /* background-color: #daf4fe; */
 }
 
 
@@ -12,8 +12,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 1%;
     background-color: #daf4fe;
+}
+.profile{
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    background-color:aquamarine;
+    border: solid 2px #ffffff;
+    display: flex;justify-content: center;align-items: center;
+
+}
+.profile>div{
+    display: flex;justify-content: center;align-items: center;
+}
+.userLogo{
+    font-size: 2rem;
 }
 
 .logo {
@@ -34,6 +49,9 @@ hr {
     border: none; 
     height: 3px; 
     background-color: #0eafe5; 
+  }
+  body{
+    background-color: #8dc9de ;
   }
 
 
@@ -63,4 +81,7 @@ hr {
 .box:hover {
     box-shadow: black 3px 3px 10px 1px;
 }
+
+
+
 
