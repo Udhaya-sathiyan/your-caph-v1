@@ -38,3 +38,33 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
     
     })
+   
+    document.addEventListener("DOMContentLoaded", function () {
+        // Add click event listener for the logo
+        const logo = document.getElementById("logoImage");
+        const title = document.getElementById("dashboardTitle");
+        const profile = document.getElementById("profileBox");
+
+        // Define navigation for different areas
+        logo.addEventListener("click", () => window.location.href = 'index.html'); // Or another home page URL
+        title.addEventListener("click", () => window.location.href = 'index.html');
+        profile.addEventListener("click", () => window.location.href = 'profile.html'); // Or another profile page
+
+        // Add touch event for mobile (as touchstart event)
+        logo.addEventListener("touchstart", () => window.location.href = 'index.html');
+        title.addEventListener("touchstart", () => window.location.href = 'index.html');
+        profile.addEventListener("touchstart", () => window.location.href = 'profile.html');
+
+        // Add navigation for boxes
+        const boxes = document.querySelectorAll(".box");
+        boxes.forEach(box => {
+            box.addEventListener("click", () => {
+                const link = box.querySelector("a");
+                window.location.href = link.href;
+            });
+            box.addEventListener("touchstart", () => {
+                const link = box.querySelector("a");
+                window.location.href = link.href;
+            });
+        });
+    });

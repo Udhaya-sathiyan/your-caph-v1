@@ -1,27 +1,168 @@
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-     background-color: #daf4fe;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* Header styles */
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between;  
     align-items: center;
     padding: 20px;
-    background-color: #daf4fe;
+    background-color:  #daf4fe;
 }
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: flex-start;  
+}
+
 .logo {
-    height: 100px; 
+     width: 120px; 
+    /* height: 50px;  */
 }
 
 .title {
-    font-size: 30px;
+    flex-grow: 1;
     text-align: center;
-    /* flex-grow: ; */
+    font-size: 24px;
+    color: #333;
 }
 
 .profile {
-    height: 100px; 
-    /* border-radius: 50%; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;  
 }
+hr {
+    border: none; 
+    height: 3px; 
+    background-color: #2c3e50; 
+  }
+
+.userLogo {
+    width: 40px;
+    height: 40px;
+    background-color: #2c3e50;
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+/* Sidebar Styles  */
+main {
+    display: flex;
+    flex-grow: 1;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #2d3f47;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sidebar-menu {
+    list-style-type: none;
+    width: 100%;
+}
+
+.sidebar-menu li {
+    margin: 10px 0;
+}
+
+.sidebar-menu a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+}
+
+.sidebar-menu a:hover {
+    background-color: #34495e;
+}
+
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #ecf0f1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.delete-btn {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.add-row input {
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+}
+#addPatientForm{
+    margin-top: 8%;
+}
+#searchBar{
+    margin-left: 10%;
+}
+
+

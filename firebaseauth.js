@@ -32,7 +32,7 @@ async function signUpWithUsername(username, password,email) {
 
     if (usernameSnap.exists()) {
         showMessage("You already signedup.Please login");
-        return;
+        // return;
     }
 
     try {
@@ -113,6 +113,7 @@ document.getElementById("signUpForm").addEventListener("submit", (event) => {
     let hasErrors = false;
 
     // Validation
+    
     if (username.length === 0) {
         showMessage("Please fill this field", "UserNameError");
         hasErrors = true;
@@ -120,8 +121,14 @@ document.getElementById("signUpForm").addEventListener("submit", (event) => {
         showMessage("Username must be at least 3 characters", "UserNameError");
         hasErrors = true;
     }
-    else if(username.length>8){
-        showMessage("Username can not exceed 15 characters");
+    else if (username.length > 15) {
+        showMessage("Username cannot exceed 40 characters.", "UserNameError");
+        hasErrors = true;
+    } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        showMessage("Username can only contain letters, numbers, and underscores.", "UserNameError");
+        hasErrors = true;
+    } else if (/\s/.test(username)) {
+        showMessage("Username cannot contain spaces.", "UserNameError");
         hasErrors = true;
     }
 
@@ -158,3 +165,5 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
         loginWithUsername( password,email);
     }
 });
+
+
