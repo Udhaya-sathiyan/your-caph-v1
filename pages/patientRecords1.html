@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Records</title>
+    <link rel="stylesheet" href="../css/Records1.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<!-- Header Section -->
+<header class="header">
+    <div class="header-content">
+        <!-- Logo on the left -->
+        <div class="logo-container">
+            <img src="../../assets/images/logo_img_3.jpg" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Title centered -->
+        <h1 class="title">Patients Records</h1>
+
+        <!-- Profile (username) on the right -->
+        <div class="profile">
+            <div class="userLogo"></div> <!-- Placeholder for user initial -->
+        </div>
+    </div>
+</header>
+<hr>
+
+<!-- Main content Section -->
+<main>
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./patientRecords1.html">Patients Records</a></li>
+            <li><a href="./Appoinment.html">Appointments</a></li>
+            <li><a href="./Appoinment.html">Billing</a></li>
+        </ul>
+    </aside>
+
+    <section class="content">
+        <div>
+            <!-- Search bar with icon -->
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="searchBar"
+                    placeholder="Search patient name..."
+                    class="search-bar"
+                />
+                <button id="searchButton" class="search-button">
+                    🔍
+                </button>
+            </div>
+        </div>
+
+        <form id="addPatientForm">
+            <h2>Add Patient</h2>
+            
+            <!-- Patient Name: Only letters allowed -->
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Patient Name" 
+                       pattern="[A-Za-z\s]+" 
+                       title="Only letters and spaces are allowed" 
+                       required autocomplete="off" />
+                <span class="error" id="nameError"></span>
+            </div>
+            
+            <!-- Age: Only numbers, max 3 digits -->
+            <div class="form-group">
+                <input type="text" id="age" placeholder="Age" 
+                       pattern="\d{1,3}" 
+                       title="Only numbers are allowed, and up to 3 digits" 
+                       required autocomplete="off" />
+                <span class="error" id="ageError"></span>
+            </div>
+            
+            <!-- Diagnosis: Only letters with min and max length -->
+            <div class="form-group">
+                <input type="text" id="diagnosis" placeholder="Diagnosis" 
+                       minlength="3" maxlength="50" 
+                       pattern="[A-Za-z\s]+" 
+                       title="Only letters and spaces are allowed (3 to 50 characters)" 
+                       required autocomplete="off" />
+                <span class="error" id="diagnosisError"></span>
+            </div>
+            
+            <!-- Details: Only letters with min and max length -->
+            <div class="form-group">
+                <input type="text" id="details" placeholder="Details" 
+                       minlength="5" maxlength="100" 
+                       pattern="[A-Za-z\s]+" 
+                       title="Only letters and spaces are allowed (5 to 100 characters)" 
+                       required autocomplete="off" />
+                <span class="error" id="detailsError"></span>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Add Patient</button>
+        </form>
+        
+        
+
+        <div>
+            <h2>Patient List</h2>
+            <div id="noResultsMessage" >
+                No results found.
+            </div>
+            
+            <table class="table" id="tb-patient">
+                <thead>
+                    <tr>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Diagnosis</th>
+                        <th scope="col">Details</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+</main>
+
+
+<script type="module" src="../js/Records1.js"></script>
+</body>
+</html>
+
+
+

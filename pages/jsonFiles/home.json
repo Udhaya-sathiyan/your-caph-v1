@@ -1,6 +1,0 @@
-{
-    "patients": {
-        "1": { "id": 1, "name": "John", "age": 31, "diagnosis": "Flu", "details": "Mild symptoms" },
-        "2": { "id": 2, "name": "Jane", "age": 28, "diagnosis": "Allergy", "details": "Seasonal allergy" }
-    }
-}

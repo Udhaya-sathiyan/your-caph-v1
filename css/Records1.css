@@ -118,51 +118,93 @@ table {
     margin-top: 20px;
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
+/* Adjust table and search bar size */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 300px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ccc;
+    padding: 8px;
     text-align: left;
 }
 
-th {
-    background-color: #f4f4f4;
+.table th {
+    background-color: #b56f6f;
 }
 
-button {
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
+.highlight {
+    background-color: #ffff99; /* Highlight matched rows */
+    transition: background-color 0.3s ease;
+}
+#noResultsMessage{
+    display: none; 
+    text-align: center; 
+    margin-top: 20px; 
+    color:red;
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+    margin-top: 20px;
+}
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.form-group {
     margin-bottom: 15px;
 }
 
-button:hover {
-    background-color: #218838;
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-.delete-btn {
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    cursor: pointer;
+input:focus {
+    border-color: #2c3e50;
+    outline: none;
 }
 
-.delete-btn:hover {
-    background-color: #c82333;
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
 }
-
-.add-row input {
-    padding: 5px 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-}
-#addPatientForm{
-    margin-top: 8%;
-}
-#searchBar{
-    margin-left: 10%;
-}
-
-

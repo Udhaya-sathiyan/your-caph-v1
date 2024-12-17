@@ -50,7 +50,7 @@ async function signUpWithUsername(username, password,email) {
         });
         localStorage.setItem("userName",username)
         showMessage("Account created successfully!", "signUpMessage", "green");
-        window.location.href = "homepage.html"; // Ensure this page exists
+        window.location.href = "/pages/home.html"; // Ensure this page exists
     } catch (error) {
         showMessage(`Error creating user: ${error.message}`, "signUpMessage");
     }
@@ -63,7 +63,7 @@ async function loginWithUsername( password,email) {
         await signInWithEmailAndPassword(auth, email, password);
         showMessage("Login successful!", "loginMessage", "green");
         localStorage.setItem("email",email)
-        window.location.href = "homepage.html"; // Ensure this page exists
+        window.location.href = "/pages/home.html";; // Ensure this page exists
     } catch (error) {
         showMessage(`Login error: ${error.message}`, "loginMessage");
     }

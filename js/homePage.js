@@ -55,16 +55,6 @@ document.addEventListener("DOMContentLoaded",()=>{
         title.addEventListener("touchstart", () => window.location.href = 'index.html');
         profile.addEventListener("touchstart", () => window.location.href = 'profile.html');
 
-        // Add navigation for boxes
-        const boxes = document.querySelectorAll(".box");
-        boxes.forEach(box => {
-            box.addEventListener("click", () => {
-                const link = box.querySelector("a");
-                window.location.href = link.href;
-            });
-            box.addEventListener("touchstart", () => {
-                const link = box.querySelector("a");
-                window.location.href = link.href;
-            });
-        });
+      
+        
     });

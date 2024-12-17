@@ -1,0 +1,16 @@
+{
+    "patients": {
+        "1": { "id": 1, "name": "John", "age": 31, "diagnosis": "Flu", "details": "Mild symptoms" },
+        "2": { "id": 2, "name": "Jane", "age": 28, "diagnosis": "Allergy", "details": "Seasonal allergy" },
+        "3": { "id": 3, "name": "Michael", "age": 45, "diagnosis": "Hypertension", "details": "Requires regular monitoring" },
+        "4": { "id": 4, "name": "Sara", "age": 22, "diagnosis": "Asthma", "details": "Needs inhaler twice daily" },
+        "5": { "id": 5, "name": "David", "age": 35, "diagnosis": "Fracture", "details": "Fractured leg; cast applied" },
+        "6": { "id": 6, "name": "Emily", "age": 30, "diagnosis": "Diabetes", "details": "Type 2 diabetes; insulin dependent" },
+        "7": { "id": 7, "name": "Tom", "age": 55, "diagnosis": "Arthritis", "details": "Joint pain; requires physiotherapy" },
+        "8": { "id": 8, "name": "Anna", "age": 40, "diagnosis": "Migraine", "details": "Chronic headaches; prescribed medication" },
+        "9": { "id": 9, "name": "Paul", "age": 50, "diagnosis": "Back Pain", "details": "Lower back pain; needs exercise therapy" },
+        "10": { "id": 10, "name": "Sophia", "age": 33, "diagnosis": "Anemia", "details": "Low hemoglobin levels; iron supplements prescribed" }
+    }
+}
+
+
