@@ -208,3 +208,14 @@ input:focus {
     margin-top: 5px;
     display: block;
 }
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+form {
+    display: none;
+}
+

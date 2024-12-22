@@ -3,24 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="./css/index.css">
-    
+    <title>Username-based Authentication</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <img src=".//assets/images/logo_img_3.jpg" alt="Caph Logo" />
-        </div>
-        <h2>Welcome to Your Caph</h2>
-    </header>
-    <div class="welcome-container">
-        <h3>Access and manage patient records with ease</h3>
-        <a href="./pages/login.html" class="login-btn">Login to Continue</a>
+
+
+<form id="loginForm" style="display: block; margin-bottom: 20px;" novalidate>
+    <!-- <label for="loginUsername">Username:</label>
+    <input type="text" id="loginUsername" required>
+    <span id="usernameError" style="color: red;"></span> -->
+
+    <label for="loginEmail">Email:</label>
+    <input type="email" id="loginEmail" required>
+    <span id="emailError" style="color: red;"></span>
+
+
+    <label for="loginPassword">Password:</label>
+    <input type="password" id="loginPassword" required>
+    <span id="passwordError" style="color: red;"></span>
+
+    <div class="form-footer">
+        <button type="submit">Log In</button>
     </div>
-    <footer>
-        &copy; 2024 Caph Healthcare Systems
-    </footer>
+    <div id="loginMessage" style="color: green;"></div>
+
+    <div id="signUpPrompt">
+        <p>If you don't have an account, <button type="button" id="showSignUpForm">Sign Up</button></p>
+    </div>
+</form>
+
+
+<form id="signUpForm" style="display: none; margin-top: 20px;" novalidate>
+    <h2>Create an account</h2>
+    <label for="signUpUsername">Username:</label>
+    <input type="text" id="signUpUsername" required>
+    <span id="UserNameError" style="color: red;"></span>
+
+    <label for="signUpEmail">Email:</label>
+    <input type="email" id="signUpEmail" required>
+    <span id="emailError" style="color: red;"></span>
+    
+
+    <label for="signUpPassword">Password:</label>
+    <input type="password" id="signUpPassword" required>
+    <span id="PasswordError" style="color: red;"></span>
+
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" required>
+    <span id="ConfirmPasswordError" style="color: red;"></span>
+
+    <div class="form-footer">
+        <button type="submit" id="msg-btn">Sign Up</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <p>Already have an account? <button type="button" id="showLoginForm">Sign In</button></p>
+    </div>
+    <div id="signUpMessage" style="color: green;"></div>
+</form>
+ 
+ <script type="module" src="./js/firebaseauth.js">
+    
+</script> 
+
+
+
+
 </body>
 </html>
 

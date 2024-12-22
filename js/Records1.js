@@ -39,82 +39,53 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
     
     })
-   
 
-// Fetch patient data from home.json and render the table
-// Initialize patient data
+// Patient Data
 let patientsData = { patients: {} };
 
-// Load patient data from localStorage on page load
-function loadPatientData() {
-    const storedData = localStorage.getItem("patientsData");
-    if (storedData) {
-        patientsData = JSON.parse(storedData);
-        renderTable(); // Render the table with loaded data
+// Fetch Patient Data
+const fetchPatientData = async () => {
+    try {
+        const response = await fetch("/json/home.json");
+        if (!response.ok) throw new Error("Failed to fetch patient data");
+        patientsData = await response.json();
+        renderTable();
+    } catch (error) {
+        console.error("Error fetching patient data:", error);
     }
-}
-
-// Save patient data to localStorage
-function savePatientData() {
-    localStorage.setItem("patientsData", JSON.stringify(patientsData));
-}
-
-// Render the table dynamically
-const renderTable = () => {
-    const tbody = document.querySelector("#tb-patient tbody");
-    tbody.innerHTML = ""; // Clear previous rows
-
-    Object.values(patientsData.patients).forEach(patient => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${patient.name}</td>
-            <td>${patient.age}</td>
-            <td>${patient.diagnosis}</td>
-            <td>
-                <a href="details.html?id=${patient.id}" class="btn btn-primary">View Details</a>
-            </td>
-            <td>
-                <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-
-    // Attach delete event
-    document.querySelectorAll(".delete-patient").forEach(button => {
-        button.addEventListener("click", deletePatient);
-    });
 };
 
+// Render Patient Table
+const renderTable = () => {
+    const tbody = document.querySelector("#tb-patient tbody");
+    tbody.innerHTML = "";
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Get patient ID from query string
-    const params = new URLSearchParams(window.location.search);
-    const patientId = params.get("id");
-
-    // Load patient data from localStorage
-    const storedData = localStorage.getItem("patientsData");
-    const patientsData = storedData ? JSON.parse(storedData) : { patients: {} };
-
-    if (patientId && patientsData.patients[patientId]) {
-        const patient = patientsData.patients[patientId];
-        // Display patient details
-        document.getElementById("patientDetails").innerHTML = `
-            <p><strong>Name:</strong> ${patient.name}</p>
-            <p><strong>Age:</strong> ${patient.age}</p>
-            <p><strong>Diagnosis:</strong> ${patient.diagnosis}</p>
-            <p><strong>Details:</strong> ${patient.details}</p>
-        `;
-    } else {
-        document.getElementById("patientDetails").innerHTML = `
-            <p>Patient details not found.</p>
-        `;
+    const patients = Object.values(patientsData.patients);
+    if (patients.length === 0) {
+        const row = `<tr><td colspan="5" style="text-align:center;">No patients found</td></tr>`;
+        tbody.innerHTML = row;
+        return;
     }
-});
 
+    patients.forEach(patient => {
+        const row = `
+            <tr>
+                <td>${patient.name}</td>
+                <td>${patient.age}</td>
+                <td>${patient.diagnosis}</td>
+                <td>${patient.details}</td>
+                <td>
+                    <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML("beforeend", row);
+    });
 
-// Add a new patient
+    attachDeleteEvents();
+};
+
+// Add New Patient
 const addPatient = (event) => {
     event.preventDefault();
 
@@ -123,19 +94,43 @@ const addPatient = (event) => {
     const diagnosis = document.getElementById("diagnosis").value.trim();
     const details = document.getElementById("details").value.trim();
 
-    if (name && age && diagnosis && details) {
-        const id = Date.now(); // Generate a unique ID
-        patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
+    if (!validateForm(name, age, diagnosis, details)) return;
 
-        savePatientData(); // Save updated data to localStorage
-        renderTable(); // Re-render the table
-
-        // Clear the form
-        document.getElementById("addPatientForm").reset();
-    }
+    const id = Date.now();
+    patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
+    renderTable();
+    document.getElementById("addPatientForm").reset();
 };
 
-// Delete a patient
+// Validate Form
+const validateForm = (name, age, diagnosis, details) => {
+    let isValid = true;
+    document.querySelectorAll(".error").forEach(error => (error.textContent = ""));
+
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+        document.getElementById("nameError").textContent = "Name must only contain letters.";
+        isValid = false;
+    }
+
+    if (!/^\d{1,3}$/.test(age)) {
+        document.getElementById("ageError").textContent = "Age must be a number (1-3 digits).";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{3,50}$/.test(diagnosis)) {
+        document.getElementById("diagnosisError").textContent = "Diagnosis must be 3-50 letters.";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{5,100}$/.test(details)) {
+        document.getElementById("detailsError").textContent = "Details must be 5-100 letters.";
+        isValid = false;
+    }
+
+    return isValid;
+};
+
+// Delete Patient
 const deletePatient = (event) => {
     const id = event.target.getAttribute("data-id");
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
@@ -147,31 +142,40 @@ const deletePatient = (event) => {
     }
 };
 
-// Search functionality to filter and highlight the patient
+// Attach Delete Events
+const attachDeleteEvents = () => {
+    document.querySelectorAll(".delete-patient").forEach(button => {
+        button.addEventListener("click", deletePatient);
+    });
+};
+
+// Search Patient
 const searchPatient = () => {
     const query = document.getElementById("searchBar").value.toLowerCase().trim();
     const rows = document.querySelectorAll("#tb-patient tbody tr");
+    let matchFound = false;
 
     rows.forEach(row => {
         const nameCell = row.querySelector("td:first-child");
         if (nameCell) {
             const patientName = nameCell.textContent.toLowerCase();
             if (patientName.includes(query)) {
-                row.style.display = ""; // Show matching row
-                row.classList.add("highlight");
-                row.scrollIntoView({ behavior: "smooth", block: "center" });
+                row.style.display = "";
+                matchFound = true;
             } else {
-                row.style.display = "none"; // Hide non-matching rows
-                row.classList.remove("highlight");
+                row.style.display = "none";
             }
         }
     });
+
+    const noResultsMessage = document.getElementById("noResultsMessage");
+    noResultsMessage.style.display = matchFound ? "none" : "block";
 };
 
-// Attach search event listener for dynamic filtering
-document.getElementById("searchBar").addEventListener("input", searchPatient);
-document.getElementById("addPatientForm").addEventListener("submit", addPatient);
-
+// Event Listeners
+document.addEventListener("DOMContentLoaded", () => {
+    fetchPatientData();
+})
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", async () => {
     loadPatientData(); // Load patient data from localStorage
