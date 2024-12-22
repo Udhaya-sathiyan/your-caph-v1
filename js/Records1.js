@@ -17,64 +17,74 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fetch user data from Firebase for authentication
-async function fetchUserData() {
-    try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        let email = localStorage.getItem("email");
-        querySnapshot.forEach((doc) => {
-            let userData = doc.data();
-            if (userData.email === email) {
-                document.querySelector(".userLogo").innerText = userData.username.slice(0, 1);
-            }
-        });
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-    }
+async function fetchdata() {
+    const query = await getDocs(collection(db, "users"));
+    let email=localStorage.getItem("email");    
+    query.forEach((doc) => {
+        let userData=doc.data();
+        if(userData.email==email){
+            document.querySelector(".userLogo").innerText=userData.username.slice(0,1);
+
+        }
+        
+    });
 }
 
-// Fetch patient data from home.json and render the table
-let patientsData = {};
-async function fetchPatientData() {
+fetchdata();
+ 
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+    document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
+    
+    })
+
+// Patient Data
+let patientsData = { patients: {} };
+
+// Fetch Patient Data
+const fetchPatientData = async () => {
     try {
-        const response = await fetch("/json/home.json"); // Path to your JSON file
-        if (!response.ok) {
-            throw new Error("Failed to load patient data");
-        }
-        const data = await response.json();
-        patientsData = data; // Update global variable with fetched data
-        renderTable(); // Render the table with fetched data
+        const response = await fetch("/json/home.json");
+        if (!response.ok) throw new Error("Failed to fetch patient data");
+        patientsData = await response.json();
+        renderTable();
     } catch (error) {
         console.error("Error fetching patient data:", error);
     }
-}
-
-// Render the table dynamically
-const renderTable = () => {
-    const tbody = document.querySelector("#tb-patient tbody");
-    tbody.innerHTML = ""; // Clear previous rows
-
-    Object.values(patientsData.patients).forEach(patient => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${patient.name}</td>
-            <td>${patient.age}</td>
-            <td>${patient.diagnosis}</td>
-            <td>${patient.details}</td>
-            <td>
-                <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-
-    // Attach delete event
-    document.querySelectorAll(".delete-patient").forEach(button => {
-        button.addEventListener("click", deletePatient);
-    });
 };
 
-// Add a new patient
+// Render Patient Table
+const renderTable = () => {
+    const tbody = document.querySelector("#tb-patient tbody");
+    tbody.innerHTML = "";
+
+    const patients = Object.values(patientsData.patients);
+    if (patients.length === 0) {
+        const row = `<tr><td colspan="5" style="text-align:center;">No patients found</td></tr>`;
+        tbody.innerHTML = row;
+        return;
+    }
+
+    patients.forEach(patient => {
+        const row = `
+            <tr>
+                <td>${patient.name}</td>
+                <td>${patient.age}</td>
+                <td>${patient.diagnosis}</td>
+                <td>${patient.details}</td>
+                <td>
+                    <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML("beforeend", row);
+    });
+
+    attachDeleteEvents();
+};
+
+// Add New Patient
 const addPatient = (event) => {
     event.preventDefault();
 
@@ -83,99 +93,90 @@ const addPatient = (event) => {
     const diagnosis = document.getElementById("diagnosis").value.trim();
     const details = document.getElementById("details").value.trim();
 
-    if (name && age && diagnosis && details) {
-        const id = Date.now(); // Generate a unique ID
-        patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
-        renderTable(); // Re-render the table
+    if (!validateForm(name, age, diagnosis, details)) return;
 
-        // Clear the form
-        document.getElementById("addPatientForm").reset();
-    }
+    const id = Date.now();
+    patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
+    renderTable();
+    document.getElementById("addPatientForm").reset();
 };
 
-// Delete a patient
+// Validate Form
+const validateForm = (name, age, diagnosis, details) => {
+    let isValid = true;
+    document.querySelectorAll(".error").forEach(error => (error.textContent = ""));
+
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+        document.getElementById("nameError").textContent = "Name must only contain letters.";
+        isValid = false;
+    }
+
+    if (!/^\d{1,3}$/.test(age)) {
+        document.getElementById("ageError").textContent = "Age must be a number (1-3 digits).";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{3,50}$/.test(diagnosis)) {
+        document.getElementById("diagnosisError").textContent = "Diagnosis must be 3-50 letters.";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{5,100}$/.test(details)) {
+        document.getElementById("detailsError").textContent = "Details must be 5-100 letters.";
+        isValid = false;
+    }
+
+    return isValid;
+};
+
+// Delete Patient
 const deletePatient = (event) => {
     const id = event.target.getAttribute("data-id");
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
     if (confirmDelete) {
         delete patientsData.patients[id];
-        renderTable(); // Re-render the table
+        renderTable();
     }
 };
 
-// Search functionality to filter and highlight the patient
+// Attach Delete Events
+const attachDeleteEvents = () => {
+    document.querySelectorAll(".delete-patient").forEach(button => {
+        button.addEventListener("click", deletePatient);
+    });
+};
+
+// Search Patient
 const searchPatient = () => {
     const query = document.getElementById("searchBar").value.toLowerCase().trim();
     const rows = document.querySelectorAll("#tb-patient tbody tr");
+    let matchFound = false;
 
     rows.forEach(row => {
         const nameCell = row.querySelector("td:first-child");
         if (nameCell) {
             const patientName = nameCell.textContent.toLowerCase();
             if (patientName.includes(query)) {
-                row.style.display = ""; // Show matching row
-                row.classList.add("highlight");
-                row.scrollIntoView({ behavior: "smooth", block: "center" });
+                row.style.display = "";
+                matchFound = true;
             } else {
-                row.style.display = "none"; // Hide non-matching rows
-                row.classList.remove("highlight");
+                row.style.display = "none";
             }
         }
     });
+
+    const noResultsMessage = document.getElementById("noResultsMessage");
+    noResultsMessage.style.display = matchFound ? "none" : "block";
 };
 
-// Attach search event listener for dynamic filtering
-document.getElementById("searchBar").addEventListener("input", searchPatient);
-document.getElementById("addPatientForm").addEventListener("submit", addPatient);
+// Event Listeners
+document.addEventListener("DOMContentLoaded", () => {
+    fetchPatientData();
 
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", async () => {
-    // Fetch and display user logo from Firebase
-    await fetchUserData();
+    document.getElementById("addPatientForm").addEventListener("submit", addPatient);
+    document.getElementById("searchBar").addEventListener("input", searchPatient);
 
-    // Fetch and render patient data from JSON file
-    await fetchPatientData();
-});
-
-document.getElementById("addPatientForm").addEventListener("submit", function (e) {
-    let isValid = true;
-
-    // Clear all previous error messages
-    document.querySelectorAll(".error").forEach(error => {
-        error.textContent = "";
+    document.getElementById("addPatientButton").addEventListener("click", () => {
+        document.getElementById("addPatientForm").style.display = "block";
     });
-
-    // Validate Name: Only letters and spaces
-    const name = document.getElementById("name").value;
-    if (!/^[A-Za-z\s]+$/.test(name)) {
-        document.getElementById("nameError").textContent = "Patient Name must only contain letters and spaces.";
-        isValid = false;
-    }
-
-    // Validate Age: Only numbers, max 3 digits
-    const age = document.getElementById("age").value;
-    if (!/^\d{1,3}$/.test(age)) {
-        document.getElementById("ageError").textContent = "Age must be a number (up to 3 digits).";
-        isValid = false;
-    }
-
-    // Validate Diagnosis: Only letters, min 3, max 50 characters
-    const diagnosis = document.getElementById("diagnosis").value;
-    if (!/^[A-Za-z\s]{3,50}$/.test(diagnosis)) {
-        document.getElementById("diagnosisError").textContent = "Diagnosis must contain only letters (3 to 50 characters).";
-        isValid = false;
-    }
-
-    // Validate Details: Only letters, min 5, max 100 characters
-    const details = document.getElementById("details").value;
-    if (!/^[A-Za-z\s]{5,100}$/.test(details)) {
-        document.getElementById("detailsError").textContent = "Details must contain only letters (5 to 100 characters).";
-        isValid = false;
-    }
-
-    // Prevent form submission if validation fails
-    if (!isValid) {
-        e.preventDefault();
-    }
 });
-

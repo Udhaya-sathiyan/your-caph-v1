@@ -57,76 +57,55 @@
             </div>
         </div>
 
+        <button id="addPatientButton" class="btn">Add Patient</button>
+
         <form id="addPatientForm">
-            <h2>Add Patient</h2>
-            
-            <!-- Patient Name: Only letters allowed -->
             <div class="form-group">
-                <input type="text" id="name" placeholder="Patient Name" 
-                       pattern="[A-Za-z\s]+" 
-                       title="Only letters and spaces are allowed" 
-                       required autocomplete="off" />
-                <span class="error" id="nameError"></span>
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter patient's name">
+                <span id="nameError" class="error"></span>
             </div>
-            
-            <!-- Age: Only numbers, max 3 digits -->
             <div class="form-group">
-                <input type="text" id="age" placeholder="Age" 
-                       pattern="\d{1,3}" 
-                       title="Only numbers are allowed, and up to 3 digits" 
-                       required autocomplete="off" />
-                <span class="error" id="ageError"></span>
+                <label for="age">Age:</label>
+                <input type="text" id="age" placeholder="Enter patient's age">
+                <span id="ageError" class="error"></span>
             </div>
-            
-            <!-- Diagnosis: Only letters with min and max length -->
             <div class="form-group">
-                <input type="text" id="diagnosis" placeholder="Diagnosis" 
-                       minlength="3" maxlength="50" 
-                       pattern="[A-Za-z\s]+" 
-                       title="Only letters and spaces are allowed (3 to 50 characters)" 
-                       required autocomplete="off" />
-                <span class="error" id="diagnosisError"></span>
+                <label for="diagnosis">Diagnosis:</label>
+                <input type="text" id="diagnosis" placeholder="Enter diagnosis">
+                <span id="diagnosisError" class="error"></span>
             </div>
-            
-            <!-- Details: Only letters with min and max length -->
             <div class="form-group">
-                <input type="text" id="details" placeholder="Details" 
-                       minlength="5" maxlength="100" 
-                       pattern="[A-Za-z\s]+" 
-                       title="Only letters and spaces are allowed (5 to 100 characters)" 
-                       required autocomplete="off" />
-                <span class="error" id="detailsError"></span>
+                <label for="details">Details:</label>
+                <input type="text" id="details" placeholder="Enter details">
+                <span id="detailsError" class="error"></span>
             </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="btn">Add Patient</button>
+            <button type="submit">Add Patient</button>
         </form>
-        
         
 
         <div>
             <h2>Patient List</h2>
-            <div id="noResultsMessage" >
+            <div id="noResultsMessage" style="display:none; text-align:center; color:red;">
                 No results found.
             </div>
             
-            <table class="table" id="tb-patient">
-                <thead>
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Diagnosis</th>
-                        <th scope="col">Details</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dynamic rows will be added here -->
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table class="table" id="tb-patient">
+                    <thead>
+                        <tr>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Diagnosis</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </section>
-    
 </main>
 
 
