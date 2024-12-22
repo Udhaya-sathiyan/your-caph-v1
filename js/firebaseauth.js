@@ -6,7 +6,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyCSWWrVmoNGEwos6WCwxgXXE8wKOylG2Lk",
     authDomain: "your-caph.firebaseapp.com",
     projectId: "your-caph",
-    storageBucket: "your-caph.firebasestorage.app",
+    storageBucket: "your-caph.appspot.com",
     messagingSenderId: "160074115856",
     appId: "1:160074115856:web:d6ebda7517356aecd25395",
     measurementId: "G-DQ77205PXD"
@@ -17,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
 
-// Helper function to show messages
+// Helper function to show error messages
 function showMessage(message, elementId, color = "red") {
     const element = document.getElementById(elementId);
     element.style.color = color;
@@ -25,145 +25,55 @@ function showMessage(message, elementId, color = "red") {
 }
 
 // Sign Up Function
-async function signUpWithUsername(username, password,email) {
-    const usernameRef = doc(db, "usernames", username);
-    const userRef = doc(db, "users", email); // Create a `users` collection to store user details
-    const usernameSnap = await getDoc(usernameRef);
-
-    if (usernameSnap.exists()) {
-        showMessage("You already signedup.Please login");
-        // return;
-    }
-
+async function signUp(username, password, email) {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store username in the 'usernames' collection
-        await setDoc(usernameRef, { uid: user.uid });
-
-        // Store additional user details in the 'users' collection
-        await setDoc(userRef, {
+        // Save user details in Firestore
+        await setDoc(doc(db, "users", email), {
             uid: user.uid,
             username: username,
-            email: email,
+            email: email
         });
-        localStorage.setItem("userName",username)
+
+        localStorage.setItem("email", email);
+        localStorage.setItem("userName", username);
+
         showMessage("Account created successfully!", "signUpMessage", "green");
-        window.location.href = "/pages/home.html"; // Ensure this page exists
+        window.location.href = "/pages/home.html"; // Redirect to home page
     } catch (error) {
-        showMessage(`Error creating user: ${error.message}`, "signUpMessage");
+        showMessage(`Error: ${error.message}`, "signUpMessage");
     }
 }
 
-
 // Login Function
-async function loginWithUsername( password,email) {
+async function login(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
+
+        localStorage.setItem("email", email);
         showMessage("Login successful!", "loginMessage", "green");
-        localStorage.setItem("email",email)
-        window.location.href = "/pages/home.html";; // Ensure this page exists
+        window.location.href = "/pages/home.html"; // Redirect to home page
     } catch (error) {
         showMessage(`Login error: ${error.message}`, "loginMessage");
     }
 }
 
-// Toggle forms
-document.getElementById("showSignUpForm").addEventListener("click", () => {
-    document.getElementById("signUpForm").style.display = "block";
-    document.getElementById("loginForm").style.display = "none";
-});
-
-document.getElementById("showLoginForm").addEventListener("click", () => {
-    document.getElementById("loginForm").style.display = "block";
-    document.getElementById("signUpForm").style.display = "none";
-});
-
-// Clear error message when user starts typing in sign-up form
-document.getElementById("signUpUsername").addEventListener("input", () => {
-    document.getElementById("UserNameError").textContent = "";
-});
-
-document.getElementById("signUpPassword").addEventListener("input", () => {
-    document.getElementById("PasswordError").textContent = "";
-});
-
-document.getElementById("confirmPassword").addEventListener("input", () => {
-    document.getElementById("ConfirmPasswordError").textContent = "";
-});
-
-// // Clear error message when user starts typing in login form
-// document.getElementById("loginUsername").addEventListener("input", () => {
-//     document.getElementById("usernameError").textContent = "";
-// });
-
-document.getElementById("loginPassword").addEventListener("input", () => {
-    document.getElementById("passwordError").textContent = "";
-});
-
-// Handle Sign Up form
+// Event listeners for form submission
 document.getElementById("signUpForm").addEventListener("submit", (event) => {
     event.preventDefault();
     const username = document.getElementById("signUpUsername").value.trim();
     const email = document.getElementById("signUpEmail").value.trim();
     const password = document.getElementById("signUpPassword").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-    let hasErrors = false;
-
-    // Validation
-    
-    if (username.length === 0) {
-        showMessage("Please fill this field", "UserNameError");
-        hasErrors = true;
-    } else if (username.length < 3) {
-        showMessage("Username must be at least 3 characters", "UserNameError");
-        hasErrors = true;
-    }
-    else if (username.length > 15) {
-        showMessage("Username cannot exceed 40 characters.", "UserNameError");
-        hasErrors = true;
-    } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-        showMessage("Username can only contain letters, numbers, and underscores.", "UserNameError");
-        hasErrors = true;
-    } else if (/\s/.test(username)) {
-        showMessage("Username cannot contain spaces.", "UserNameError");
-        hasErrors = true;
-    }
-
-    if (password.length === 0) {
-        showMessage("Please fill out this field", "PasswordError");
-        hasErrors = true;
-    } else if (password.length < 8 || !/^(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
-        showMessage("Password must be at least 8 characters and contain a number and a special character", "PasswordError");
-        hasErrors = true;
-    }
-
-    if (password !== confirmPassword) {
-        showMessage("Passwords do not match", "ConfirmPasswordError");
-        hasErrors = true;
-    }
-
-    // Call signUpWithUsername only if there are no errors
-    if (!hasErrors) {
-        signUpWithUsername(username, password,email);
-    }
+    signUp(username, password, email);
 });
 
-// Handle Login form
 document.getElementById("loginForm").addEventListener("submit", (event) => {
     event.preventDefault();
-    // const username = document.getElementById("loginUsername").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
     const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
 
-
-    if ( !password) {
-        showMessage("Please fill out all fields", "loginMessage");
-    } else {
-        loginWithUsername( password,email);
-    }
+    login(email, password);
 });
-
-

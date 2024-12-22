@@ -1,5 +1,6 @@
  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -58,3 +59,5 @@ document.addEventListener("DOMContentLoaded",()=>{
       
         
     });
+
+    
