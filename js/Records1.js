@@ -17,7 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fetch user data from Firebase for authentication
 async function fetchdata() {
     const query = await getDocs(collection(db, "users"));
     let email=localStorage.getItem("email");    
@@ -136,9 +135,7 @@ const deletePatient = (event) => {
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
     if (confirmDelete) {
         delete patientsData.patients[id];
-
-        savePatientData(); // Save updated data to localStorage
-        renderTable(); // Re-render the table
+        renderTable();
     }
 };
 
@@ -175,58 +172,11 @@ const searchPatient = () => {
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     fetchPatientData();
-})
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", async () => {
-    loadPatientData(); // Load patient data from localStorage
-    renderTable(); // Render the table
-});
 
+    document.getElementById("addPatientForm").addEventListener("submit", addPatient);
+    document.getElementById("searchBar").addEventListener("input", searchPatient);
 
-document.getElementById("addPatientForm").addEventListener("submit", function () {
-    let isValid = true;
-
-    // Clear all previous error messages for relevant fields
-    const errorFields = ["nameError", "ageError", "diagnosisError", "detailsError"];
-    errorFields.forEach(id => {
-        document.getElementById(id).textContent = "";
+    document.getElementById("addPatientButton").addEventListener("click", () => {
+        document.getElementById("addPatientForm").style.display = "block";
     });
-
-    // Validate Name: Only letters and spaces
-    const name = document.getElementById("name").value.trim();
-    if (!/^[A-Za-z\s]+$/.test(name)) {
-        document.getElementById("nameError").textContent = "Patient Name must only contain letters and spaces.";
-        isValid = false;
-    }
-
-    // Validate Age: Only numbers, max 3 digits
-    const age = document.getElementById("age").value.trim();
-    if (!/^\d{1,3}$/.test(age) || parseInt(age) <= 0) {
-        document.getElementById("ageError").textContent = "Age must be a positive number (up to 3 digits).";
-        isValid = false;
-    }
-
-    // Validate Diagnosis: Only letters and spaces, min 3, max 50 characters
-    const diagnosis = document.getElementById("diagnosis").value.trim();
-    if (!/^[A-Za-z\s]{3,50}$/.test(diagnosis)) {
-        document.getElementById("diagnosisError").textContent = "Diagnosis must contain only letters (3 to 50 characters).";
-        isValid = false;
-    }
-
-    // Validate Details: Only letters and spaces, min 5, max 100 characters
-    const details = document.getElementById("details").value.trim();
-    if (!/^[A-Za-z\s]{5,100}$/.test(details)) {
-        document.getElementById("detailsError").textContent = "Details must contain only letters (5 to 100 characters).";
-        isValid = false;
-    }
-
-    
-
-    // Prevent form submission if validation fails
-    if (!isValid) {
-        e.preventDefault();
-    }
 });
-
-
-

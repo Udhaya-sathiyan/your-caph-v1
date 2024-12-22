@@ -11,20 +11,15 @@
 </header>
 <body>
 
-
+<!-- Login Form -->
 <form id="loginForm" style="display: block; margin-bottom: 20px;" novalidate>
-    <!-- <label for="loginUsername">Username:</label>
-    <input type="text" id="loginUsername" required>
-    <span id="usernameError" style="color: red;"></span> -->
-
     <label for="loginEmail">Email:</label>
     <input type="email" id="loginEmail" required>
-    <span id="emailError" style="color: red;"></span>
-
+    <span id="loginEmailError" class="error-message" style="color: red;"></span>
 
     <label for="loginPassword">Password:</label>
     <input type="password" id="loginPassword" required>
-    <span id="passwordError" style="color: red;"></span>
+    <span id="loginPasswordError" class="error-message" style="color: red;"></span>
 
     <div class="form-footer">
         <button type="submit">Log In</button>
@@ -36,43 +31,36 @@
     </div>
 </form>
 
-
+<!-- SignUp Form -->
 <form id="signUpForm" style="display: none; margin-top: 20px;" novalidate>
     <h2>Create an account</h2>
+
     <label for="signUpUsername">Username:</label>
     <input type="text" id="signUpUsername" required>
-    <span id="UserNameError" style="color: red;"></span>
+    <span id="signUpUsernameError" class="error-message" style="color: red;"></span>
 
     <label for="signUpEmail">Email:</label>
     <input type="email" id="signUpEmail" required>
-    <span id="emailError" style="color: red;"></span>
-    
+    <span id="signUpEmailError" class="error-message" style="color: red;"></span>
 
     <label for="signUpPassword">Password:</label>
     <input type="password" id="signUpPassword" required>
-    <span id="PasswordError" style="color: red;"></span>
+    <span id="signUpPasswordError" class="error-message" style="color: red;"></span>
 
     <label for="confirmPassword">Confirm Password:</label>
     <input type="password" id="confirmPassword" required>
-    <span id="ConfirmPasswordError" style="color: red;"></span>
+    <span id="confirmPasswordError" class="error-message" style="color: red;"></span>
 
     <div class="form-footer">
-        <button type="submit" id="msg-btn">Sign Up</button>
+        <button type="submit" id="signUpBtn">Sign Up</button>
     </div>
     <div style="margin-top: 10px;">
         <p>Already have an account? <button type="button" id="showLoginForm">Sign In</button></p>
     </div>
     <div id="signUpMessage" style="color: green;"></div>
 </form>
- 
- <script type="module" src="../js/firebaseauth.js">
-    
-</script> 
 
-
-
+<script type="module" src="../js/firebaseauth.js"></script> 
 
 </body>
-
-
 </html>
