@@ -17,10 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-<<<<<<< HEAD
-=======
 // Fetch user data from Firebase for authentication
->>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 async function fetchdata() {
     const query = await getDocs(collection(db, "users"));
     let email=localStorage.getItem("email");    
@@ -32,7 +29,6 @@ async function fetchdata() {
         }
         
     });
-<<<<<<< HEAD
 }
 
 fetchdata();
@@ -90,94 +86,6 @@ const renderTable = () => {
 };
 
 // Add New Patient
-=======
-}
-
-fetchdata();
- 
-
-
-document.addEventListener("DOMContentLoaded",()=>{
-    document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
-    
-    })
-   
-
-// Fetch patient data from home.json and render the table
-// Initialize patient data
-let patientsData = { patients: {} };
-
-// Load patient data from localStorage on page load
-function loadPatientData() {
-    const storedData = localStorage.getItem("patientsData");
-    if (storedData) {
-        patientsData = JSON.parse(storedData);
-        renderTable(); // Render the table with loaded data
-    }
-}
-
-// Save patient data to localStorage
-function savePatientData() {
-    localStorage.setItem("patientsData", JSON.stringify(patientsData));
-}
-
-// Render the table dynamically
-const renderTable = () => {
-    const tbody = document.querySelector("#tb-patient tbody");
-    tbody.innerHTML = ""; // Clear previous rows
-
-    Object.values(patientsData.patients).forEach(patient => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${patient.name}</td>
-            <td>${patient.age}</td>
-            <td>${patient.diagnosis}</td>
-            <td>
-                <a href="details.html?id=${patient.id}" class="btn btn-primary">View Details</a>
-            </td>
-            <td>
-                <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-
-    // Attach delete event
-    document.querySelectorAll(".delete-patient").forEach(button => {
-        button.addEventListener("click", deletePatient);
-    });
-};
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Get patient ID from query string
-    const params = new URLSearchParams(window.location.search);
-    const patientId = params.get("id");
-
-    // Load patient data from localStorage
-    const storedData = localStorage.getItem("patientsData");
-    const patientsData = storedData ? JSON.parse(storedData) : { patients: {} };
-
-    if (patientId && patientsData.patients[patientId]) {
-        const patient = patientsData.patients[patientId];
-        // Display patient details
-        document.getElementById("patientDetails").innerHTML = `
-            <p><strong>Name:</strong> ${patient.name}</p>
-            <p><strong>Age:</strong> ${patient.age}</p>
-            <p><strong>Diagnosis:</strong> ${patient.diagnosis}</p>
-            <p><strong>Details:</strong> ${patient.details}</p>
-        `;
-    } else {
-        document.getElementById("patientDetails").innerHTML = `
-            <p>Patient details not found.</p>
-        `;
-    }
-});
-
-
-// Add a new patient
->>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 const addPatient = (event) => {
     event.preventDefault();
 
@@ -186,16 +94,7 @@ const addPatient = (event) => {
     const diagnosis = document.getElementById("diagnosis").value.trim();
     const details = document.getElementById("details").value.trim();
 
-<<<<<<< HEAD
     if (!validateForm(name, age, diagnosis, details)) return;
-=======
-    if (name && age && diagnosis && details) {
-        const id = Date.now(); // Generate a unique ID
-        patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
-
-        savePatientData(); // Save updated data to localStorage
-        renderTable(); // Re-render the table
->>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 
     const id = Date.now();
     patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
@@ -237,13 +136,9 @@ const deletePatient = (event) => {
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
     if (confirmDelete) {
         delete patientsData.patients[id];
-<<<<<<< HEAD
-        renderTable();
-=======
 
         savePatientData(); // Save updated data to localStorage
         renderTable(); // Re-render the table
->>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
     }
 };
 
@@ -280,15 +175,7 @@ const searchPatient = () => {
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     fetchPatientData();
-
-<<<<<<< HEAD
-    document.getElementById("addPatientForm").addEventListener("submit", addPatient);
-    document.getElementById("searchBar").addEventListener("input", searchPatient);
-
-    document.getElementById("addPatientButton").addEventListener("click", () => {
-        document.getElementById("addPatientForm").style.display = "block";
-    });
-=======
+})
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", async () => {
     loadPatientData(); // Load patient data from localStorage
@@ -339,5 +226,4 @@ document.getElementById("addPatientForm").addEventListener("submit", function ()
     if (!isValid) {
         e.preventDefault();
     }
->>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 });
