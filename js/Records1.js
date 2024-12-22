@@ -223,3 +223,6 @@ document.getElementById("addPatientForm").addEventListener("submit", function ()
         e.preventDefault();
     }
 });
+
+
+
