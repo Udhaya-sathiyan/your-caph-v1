@@ -17,7 +17,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+<<<<<<< HEAD
+=======
 // Fetch user data from Firebase for authentication
+>>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 async function fetchdata() {
     const query = await getDocs(collection(db, "users"));
     let email=localStorage.getItem("email");    
@@ -29,6 +32,65 @@ async function fetchdata() {
         }
         
     });
+<<<<<<< HEAD
+}
+
+fetchdata();
+ 
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+    document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
+    
+    })
+
+// Patient Data
+let patientsData = { patients: {} };
+
+// Fetch Patient Data
+const fetchPatientData = async () => {
+    try {
+        const response = await fetch("/json/home.json");
+        if (!response.ok) throw new Error("Failed to fetch patient data");
+        patientsData = await response.json();
+        renderTable();
+    } catch (error) {
+        console.error("Error fetching patient data:", error);
+    }
+};
+
+// Render Patient Table
+const renderTable = () => {
+    const tbody = document.querySelector("#tb-patient tbody");
+    tbody.innerHTML = "";
+
+    const patients = Object.values(patientsData.patients);
+    if (patients.length === 0) {
+        const row = `<tr><td colspan="5" style="text-align:center;">No patients found</td></tr>`;
+        tbody.innerHTML = row;
+        return;
+    }
+
+    patients.forEach(patient => {
+        const row = `
+            <tr>
+                <td>${patient.name}</td>
+                <td>${patient.age}</td>
+                <td>${patient.diagnosis}</td>
+                <td>${patient.details}</td>
+                <td>
+                    <button class="btn btn-danger delete-patient" data-id="${patient.id}">Delete</button>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML("beforeend", row);
+    });
+
+    attachDeleteEvents();
+};
+
+// Add New Patient
+=======
 }
 
 fetchdata();
@@ -115,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Add a new patient
+>>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 const addPatient = (event) => {
     event.preventDefault();
 
@@ -123,55 +186,109 @@ const addPatient = (event) => {
     const diagnosis = document.getElementById("diagnosis").value.trim();
     const details = document.getElementById("details").value.trim();
 
+<<<<<<< HEAD
+    if (!validateForm(name, age, diagnosis, details)) return;
+=======
     if (name && age && diagnosis && details) {
         const id = Date.now(); // Generate a unique ID
         patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
 
         savePatientData(); // Save updated data to localStorage
         renderTable(); // Re-render the table
+>>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 
-        // Clear the form
-        document.getElementById("addPatientForm").reset();
-    }
+    const id = Date.now();
+    patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
+    renderTable();
+    document.getElementById("addPatientForm").reset();
 };
 
-// Delete a patient
+// Validate Form
+const validateForm = (name, age, diagnosis, details) => {
+    let isValid = true;
+    document.querySelectorAll(".error").forEach(error => (error.textContent = ""));
+
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+        document.getElementById("nameError").textContent = "Name must only contain letters.";
+        isValid = false;
+    }
+
+    if (!/^\d{1,3}$/.test(age)) {
+        document.getElementById("ageError").textContent = "Age must be a number (1-3 digits).";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{3,50}$/.test(diagnosis)) {
+        document.getElementById("diagnosisError").textContent = "Diagnosis must be 3-50 letters.";
+        isValid = false;
+    }
+
+    if (!/^[A-Za-z\s]{5,100}$/.test(details)) {
+        document.getElementById("detailsError").textContent = "Details must be 5-100 letters.";
+        isValid = false;
+    }
+
+    return isValid;
+};
+
+// Delete Patient
 const deletePatient = (event) => {
     const id = event.target.getAttribute("data-id");
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
     if (confirmDelete) {
         delete patientsData.patients[id];
+<<<<<<< HEAD
+        renderTable();
+=======
 
         savePatientData(); // Save updated data to localStorage
         renderTable(); // Re-render the table
+>>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
     }
 };
 
-// Search functionality to filter and highlight the patient
+// Attach Delete Events
+const attachDeleteEvents = () => {
+    document.querySelectorAll(".delete-patient").forEach(button => {
+        button.addEventListener("click", deletePatient);
+    });
+};
+
+// Search Patient
 const searchPatient = () => {
     const query = document.getElementById("searchBar").value.toLowerCase().trim();
     const rows = document.querySelectorAll("#tb-patient tbody tr");
+    let matchFound = false;
 
     rows.forEach(row => {
         const nameCell = row.querySelector("td:first-child");
         if (nameCell) {
             const patientName = nameCell.textContent.toLowerCase();
             if (patientName.includes(query)) {
-                row.style.display = ""; // Show matching row
-                row.classList.add("highlight");
-                row.scrollIntoView({ behavior: "smooth", block: "center" });
+                row.style.display = "";
+                matchFound = true;
             } else {
-                row.style.display = "none"; // Hide non-matching rows
-                row.classList.remove("highlight");
+                row.style.display = "none";
             }
         }
     });
+
+    const noResultsMessage = document.getElementById("noResultsMessage");
+    noResultsMessage.style.display = matchFound ? "none" : "block";
 };
 
-// Attach search event listener for dynamic filtering
-document.getElementById("searchBar").addEventListener("input", searchPatient);
-document.getElementById("addPatientForm").addEventListener("submit", addPatient);
+// Event Listeners
+document.addEventListener("DOMContentLoaded", () => {
+    fetchPatientData();
 
+<<<<<<< HEAD
+    document.getElementById("addPatientForm").addEventListener("submit", addPatient);
+    document.getElementById("searchBar").addEventListener("input", searchPatient);
+
+    document.getElementById("addPatientButton").addEventListener("click", () => {
+        document.getElementById("addPatientForm").style.display = "block";
+    });
+=======
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", async () => {
     loadPatientData(); // Load patient data from localStorage
@@ -222,4 +339,5 @@ document.getElementById("addPatientForm").addEventListener("submit", function ()
     if (!isValid) {
         e.preventDefault();
     }
+>>>>>>> 81ada183a82b0a3b5a1f2024bbccfdae387f4e96
 });
