@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.querySelector(".userLogo").innerText=localStorage.getItem("userName").slice(0,1);
     
     })
+   
 
 // Patient Data
 let patientsData = { patients: {} };
@@ -138,6 +139,10 @@ const deletePatient = (event) => {
         renderTable();
     }
 };
+
+document.getElementById("records").addEventListener("click", function () {
+    window.location.href = "./patientRecord2.html"; // Replace with the actual path to your HTML file
+});
 
 // Attach Delete Events
 const attachDeleteEvents = () => {
