@@ -42,14 +42,29 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 // Patient Data
 let patientsData = { patients: {} };
+const savePatientsToLocalStorage = () => {
+    localStorage.setItem("patients", JSON.stringify(patientsData.patients));
+};
 
 // Fetch Patient Data
 const fetchPatientData = async () => {
+    const storedPatients = localStorage.getItem("patients");
+    if (storedPatients) {
+        try {
+            patientsData.patients = JSON.parse(storedPatients);
+            renderTable();
+            return;
+        } catch (error) {
+            console.error("Error parsing localStorage data:", error);
+        }
+    } 
+
     try {
         const response = await fetch("/json/home.json");
         if (!response.ok) throw new Error("Failed to fetch patient data");
         patientsData = await response.json();
         renderTable();
+        savePatientsToLocalStorage(); 
     } catch (error) {
         console.error("Error fetching patient data:", error);
     }
@@ -85,6 +100,8 @@ const renderTable = () => {
     attachDeleteEvents();
 };
 
+
+
 // Add New Patient
 const addPatient = (event) => {
     event.preventDefault();
@@ -99,6 +116,7 @@ const addPatient = (event) => {
     const id = Date.now();
     patientsData.patients[id] = { id, name, age: Number(age), diagnosis, details };
     renderTable();
+    savePatientsToLocalStorage();
     document.getElementById("addPatientForm").reset();
 };
 
@@ -137,6 +155,7 @@ const deletePatient = (event) => {
     if (confirmDelete) {
         delete patientsData.patients[id];
         renderTable();
+        savePatientsToLocalStorage();
     }
 };
 

@@ -98,7 +98,7 @@ function generatePDFBlob(patient) {
     doc.text(`Doctor: ${doctorName}`, 10, 70);
     doc.text(`Date and Time: ${timestamp}`, 150, 70);
 
-    return doc.output("bloburl");
+    return doc.output("dataurl");
 }
 
 // Search patient
@@ -112,6 +112,8 @@ function searchPatient() {
 
     displayPatients(filteredPatients);
 }
+
+document.getElementById("searchPatient").addEventListener("keyup", searchPatient);
 
 // Initial display
 const patients = fetchPatientsData();

@@ -1,0 +1,144 @@
+{
+    "billingAndAppointments": {
+        "1": {
+            "patientId": 1,
+            "billing": {
+                "amount": 100,
+                "serviceDescription": "Consultation",
+                "status": "Paid",
+                "date": "2024-12-26"
+            },
+            "appointment": {
+                "doctorName": "Dr. Smith",
+                "date": "2024-12-28",
+                "time": "10:00 AM"
+            }
+        },
+        "2": {
+            "patientId": 2,
+            "billing": {
+                "amount": 150,
+                "serviceDescription": "Skin test",
+                "status": "Unpaid",
+                "date": "2024-12-25"
+            },
+            "appointment": {
+                "doctorName": "Dr. Taylor",
+                "date": "2024-12-29",
+                "time": "11:30 AM"
+            }
+        },
+        "3": {
+            "patientId": 3,
+            "billing": {
+                "amount": 200,
+                "serviceDescription": "Blood pressure monitoring",
+                "status": "Paid",
+                "date": "2024-12-24"
+            },
+            "appointment": {
+                "doctorName": "Dr. Johnson",
+                "date": "2024-12-30",
+                "time": "9:00 AM"
+            }
+        },
+        "4": {
+            "patientId": 4,
+            "billing": {
+                "amount": 80,
+                "serviceDescription": "Respiratory consultation",
+                "status": "Unpaid",
+                "date": "2024-12-27"
+            },
+            "appointment": {
+                "doctorName": "Dr. Wilson",
+                "date": "2024-12-31",
+                "time": "2:00 PM"
+            }
+        },
+        "5": {
+            "patientId": 5,
+            "billing": {
+                "amount": 300,
+                "serviceDescription": "Orthopedic consultation",
+                "status": "Paid",
+                "date": "2024-12-23"
+            },
+            "appointment": {
+                "doctorName": "Dr. Adams",
+                "date": "2024-12-29",
+                "time": "4:00 PM"
+            }
+        },
+        "6": {
+            "patientId": 6,
+            "billing": {
+                "amount": 120,
+                "serviceDescription": "Endocrinology consultation",
+                "status": "Paid",
+                "date": "2024-12-22"
+            },
+            "appointment": {
+                "doctorName": "Dr. Lee",
+                "date": "2024-12-28",
+                "time": "1:00 PM"
+            }
+        },
+        "7": {
+            "patientId": 7,
+            "billing": {
+                "amount": 250,
+                "serviceDescription": "Physical therapy session",
+                "status": "Unpaid",
+                "date": "2024-12-21"
+            },
+            "appointment": {
+                "doctorName": "Dr. Brown",
+                "date": "2024-12-30",
+                "time": "3:30 PM"
+            }
+        },
+        "8": {
+            "patientId": 8,
+            "billing": {
+                "amount": 110,
+                "serviceDescription": "Neurology consultation",
+                "status": "Paid",
+                "date": "2024-12-20"
+            },
+            "appointment": {
+                "doctorName": "Dr. Carter",
+                "date": "2024-12-27",
+                "time": "10:30 AM"
+            }
+        },
+        "9": {
+            "patientId": 9,
+            "billing": {
+                "amount": 90,
+                "serviceDescription": "Orthopedic consultation",
+                "status": "Paid",
+                "date": "2024-12-19"
+            },
+            "appointment": {
+                "doctorName": "Dr. Martin",
+                "date": "2024-12-28",
+                "time": "8:00 AM"
+            }
+        },
+        "10": {
+            "patientId": 10,
+            "billing": {
+                "amount": 70,
+                "serviceDescription": "Hematology consultation",
+                "status": "Unpaid",
+                "date": "2024-12-18"
+            },
+            "appointment": {
+                "doctorName": "Dr. Green",
+                "date": "2024-12-26",
+                "time": "11:00 AM"
+            }
+        }
+    }
+}
