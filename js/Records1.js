@@ -159,14 +159,19 @@ const deletePatient = (event) => {
     }
 };
 
+
+
 document.getElementById("records").addEventListener("click", function () {
     window.location.href = "./patientRecord2.html"; // Replace with the actual path to your HTML file
 });
 
 // Attach Delete Events
-const attachDeleteEvents = () => {
+const attachDeleteEvents =() => {
     document.querySelectorAll(".delete-patient").forEach(button => {
-        button.addEventListener("click", deletePatient);
+        button.addEventListener("click", (event) => {
+            const patientId = event.target.getAttribute("data-id");
+            deletePatient(patientId);
+        });
     });
 };
 
