@@ -149,8 +149,7 @@ const validateForm = (name, age, diagnosis, details) => {
 };
 
 // Delete Patient
-const deletePatient = (event) => {
-    const id = event.target.getAttribute("data-id");
+const deletePatient = (id) => {
     const confirmDelete = confirm("Are you sure you want to delete this patient?");
     if (confirmDelete) {
         delete patientsData.patients[id];
