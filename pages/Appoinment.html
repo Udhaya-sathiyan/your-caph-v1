@@ -39,7 +39,7 @@
         <section class="content">
             <div>
                 <!-- Search bar with icon -->
-                <div class="search-container">
+                <!-- <div class="search-container">
                     <input
                         type="text"
                         id="searchBar"
@@ -48,45 +48,69 @@
                     />
                     <button id="searchButton" class="search-button">
                         🔍
-                    </button>
+                    </button> -->
                 </div>
             </div>
-            <div>
-                <h4>Appoinment List</h4>
-                <div id="noResultsMessage" style="display:none; text-align:center; color:red;">
-                    No results found.
+            <div class="appointments-container">
+                <h2>Appointments</h2>
+            
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input
+                        type="text"
+                        id="searchBar"
+                        placeholder="Search patient name..."
+                        class="search-bar"
+                    />
+                    <button id="searchButton" class="search-button">🔍</button>
                 </div>
-                
+            
+                <!-- Add Appointment Button -->
+                <div class="add-btn-container">
+                    <button id="addAppointmentBtn" class="add-appointment-btn">Add New Appointment</button>
+                </div>
+            
+                <!-- Appointments Table -->
                 <div class="table-container">
-                    <table class="table" id="tb-patient">
+                    <table id="appointmentsTable">
                         <thead>
                             <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Time</th>
-                                <th scope="col"> Doctor</th>
-                                <th scope="col">Patient Name</th>
+                                <th>Patient</th>
+                                <th>Age</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-                </div> 
-                <div id="appointmentForm" style="display: none;">
-                    <h2 id="formTitle">Add Appointment</h2>
-                    <label for="patientSelect">Patient:</label>
-                    <select id="patientSelect"></select>
-        
-                    <label for="doctorName">Doctor Name:</label>
-                    <input type="text" id="doctorName">
-        
-                    <label for="appointmentDate">Date:</label>
-                    <input type="date" id="appointmentDate">
-        
-                    <label for="appointmentTime">Time:</label>
-                    <input type="time" id="appointmentTime">
-        
-                    <button id="saveButton">Save</button>
-                    <button id="cancelButton">Cancel</button>
                 </div>
+            
+                <!-- Hidden Form for Adding/Editing Appointments -->
+                <div id="appointmentForm" class="appointment-form" style="display: none;">
+                    <form>
+                        <label>Patient:
+                            <select id="patientSelect"></select>
+                        </label>
+                        <label>Doctor:
+                            <input type="text" id="doctorName" />
+                        </label>
+                        <label>Date:
+                            <input type="date" id="appointmentDate" />
+                        </label>
+                        <label>Time:
+                            <input type="time" id="appointmentTime" />
+                        </label>
+                        <div class="form-buttons">
+                            <button id="saveAppointment" class="save-btn">Save</button>
+                            <button id="cancelAppointment" class="cancel-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            
     </main>
     <script type="module" src="../js/Appoinment.js"></script>
 </body>
