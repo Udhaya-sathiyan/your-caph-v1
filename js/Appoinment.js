@@ -42,129 +42,171 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.addEventListener("DOMContentLoaded", () => {
         // Fetch data from localStorage
         const patients = JSON.parse(localStorage.getItem("patients")) || {};
-        const billingAndAppointments = JSON.parse(localStorage.getItem("billingAndAppointments")) || { billingAndAppointments: {} };
+        const billingAppointments = JSON.parse(localStorage.getItem("billingAndAppointments")) || { billingAndAppointments: {} };
+        const appointments = billingAppointments.billingAndAppointments;
     
-        const appointmentsTable = document.getElementById("appointmentsTable").querySelector("tbody");
-        const searchBar = document.getElementById("searchBar");
-        const appointmentForm = document.getElementById("appointmentForm");
+        // DOM elements
+        const tableBody = document.querySelector("#appointmentsTable tbody");
         const patientSelect = document.getElementById("patientSelect");
-        const doctorName = document.getElementById("doctorName");
-        const appointmentDate = document.getElementById("appointmentDate");
-        const appointmentTime = document.getElementById("appointmentTime");
-        const saveButton = document.getElementById("saveButton");
-        const cancelButton = document.getElementById("cancelButton");
-        let editingAppointmentId = null;
+        const searchBar = document.getElementById("searchBar");
+        const searchButton = document.getElementById("searchButton");
+        const appointmentForm = document.getElementById("appointmentForm");
+        const saveButton = document.getElementById("saveAppointment");
+        const cancelButton = document.getElementById("cancelAppointment");
     
-        // Render Patient Options in the Select Dropdown
-        const populatePatientOptions = () => {
-            patientSelect.innerHTML = Object.values(patients)
-                .map(patient => `<option value="${patient.id}">${patient.name}</option>`)
-                .join("");
+        // Populate patient dropdown
+        const populatePatientDropdown = () => {
+            patientSelect.innerHTML = "";
+            Object.values(patients).forEach((patient) => {
+                const option = document.createElement("option");
+                option.value = patient.id;
+                option.textContent = patient.name;
+                patientSelect.appendChild(option);
+            });
         };
+
     
-        // Render Appointments Table
-        const renderAppointmentsTable = () => {
-            appointmentsTable.innerHTML = "";
-            Object.values(billingAndAppointments.billingAndAppointments).forEach(record => {
-                if (record.appointment) {
-                    const patient = patients[record.patientId];
+    
+        // Render appointments table
+        const renderAppointments = (searchTerm = "") => {
+            tableBody.innerHTML = ""; // Clear existing rows
+            const filteredAppointments = Object.values(appointments).filter((record) => {
+                const patient = patients[record.patientId];
+                if (!patient) return false;
+                return patient.name.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+        
+            if (filteredAppointments.length === 0) {
+                // Show "No results found" message
+                const noResultsRow = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No results found</td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML("beforeend", noResultsRow);
+                return;
+            }
+        
+            // Render filtered appointments
+            filteredAppointments.forEach((record) => {
+                const patient = patients[record.patientId];
+                if (patient) {
                     const row = `
-                        <tr data-id="${record.patientId}">
-                            <td>${patient?.name || "Unknown"}</td>
-                            <td>${record.appointment.doctorName}</td>
-                            <td>${record.appointment.date}</td>
-                            <td>${record.appointment.time}</td>
+                        <tr>
+                            <td>${patient.name}</td>
+                            <td>${patient.age}</td>
+                            <td>${record.appointment?.doctorName || "N/A"}</td>
+                            <td>${record.appointment?.date || "N/A"}</td>
+                            <td>${record.appointment?.time || "N/A"}</td>
                             <td>
-                                <button class="edit-button">Edit</button>
-                                <button class="delete-button">Delete</button>
+                                <button data-id="${record.patientId}" class="edit-btn">Edit</button>
+                                <button data-id="${record.patientId}" class="delete-btn">Delete</button>
                             </td>
                         </tr>
                     `;
-                    appointmentsTable.insertAdjacentHTML("beforeend", row);
+                    tableBody.insertAdjacentHTML("beforeend", row);
                 }
             });
-    
-            // Attach Event Listeners for Actions
-            document.querySelectorAll(".edit-button").forEach(button =>
-                button.addEventListener("click", handleEditAppointment)
-            );
-            document.querySelectorAll(".delete-button").forEach(button =>
-                button.addEventListener("click", handleDeleteAppointment)
-            );
         };
+
+
+        
+        
     
-        // Add or Edit Appointment
+        // Add or update appointment
         const saveAppointment = () => {
-            const selectedPatientId = patientSelect.value;
-            const appointmentDetails = {
-                doctorName: doctorName.value,
-                date: appointmentDate.value,
-                time: appointmentTime.value,
-            };
-    
-            if (!selectedPatientId || !appointmentDetails.doctorName || !appointmentDetails.date || !appointmentDetails.time) {
-                alert("All fields are required!");
+            const patientId = patientSelect.value;
+            const doctorName = document.getElementById("doctorName").value.trim();
+            const date = document.getElementById("appointmentDate").value;
+            const time = document.getElementById("appointmentTime").value;
+        
+            if (!patientId || !doctorName || !date || !time) {
+                alert("Please fill all the fields.");
                 return;
             }
-    
-            if (editingAppointmentId) {
-                billingAndAppointments.billingAndAppointments[editingAppointmentId].appointment = appointmentDetails;
+        
+            // Check if it's an update or a new appointment
+            if (appointments[patientId]) {
+                // Update existing appointment
+                appointments[patientId].appointment = { doctorName, date, time };
             } else {
-                billingAndAppointments.billingAndAppointments[selectedPatientId] = {
-                    ...billingAndAppointments.billingAndAppointments[selectedPatientId],
-                    patientId: selectedPatientId,
-                    appointment: appointmentDetails,
+                // Add new appointment
+                appointments[patientId] = {
+                    patientId,
+                    appointment: { doctorName, date, time },
                 };
             }
-    
-            localStorage.setItem("billingAndAppointments", JSON.stringify(billingAndAppointments));
-            renderAppointmentsTable();
-            appointmentForm.style.display = "none";
+        
+            // Save to localStorage
+            localStorage.setItem("billingAndAppointments", JSON.stringify(billingAppointments));
+            renderAppointments();
+            appointmentForm.style.display = "none"; // Hide form after saving
         };
+        
     
-        // Edit Appointment
-        const handleEditAppointment = (event) => {
-            const patientId = event.target.closest("tr").dataset.id;
-            const appointment = billingAndAppointments.billingAndAppointments[patientId]?.appointment;
-    
-            if (appointment) {
-                editingAppointmentId = patientId;
-                patientSelect.value = patientId;
-                doctorName.value = appointment.doctorName;
-                appointmentDate.value = appointment.date;
-                appointmentTime.value = appointment.time;
-                document.getElementById("formTitle").innerText = "Edit Appointment";
-                appointmentForm.style.display = "block";
+        // Delete appointment
+        const deleteAppointment = (id) => {
+            if (confirm("Are you sure you want to delete this appointment?")) {
+                delete appointments[id];
+                localStorage.setItem("billingAndAppointments", JSON.stringify(billingAppointments));
+                renderAppointments();
             }
         };
     
-        // Delete Appointment
-        const handleDeleteAppointment = (event) => {
-            const patientId = event.target.closest("tr").dataset.id;
-            delete billingAndAppointments.billingAndAppointments[patientId].appointment;
-            localStorage.setItem("billingAndAppointments", JSON.stringify(billingAndAppointments));
-            renderAppointmentsTable();
-        };
-    
-        // Search Appointments
-        searchBar.addEventListener("input", () => {
-            const query = searchBar.value.toLowerCase();
-            Array.from(appointmentsTable.rows).forEach(row => {
-                const patientName = row.cells[0].textContent.toLowerCase();
-                row.style.display = patientName.includes(query) ? "" : "none";
-            });
-        });
-    
-        // Initialize
-        populatePatientOptions();
-        renderAppointmentsTable();
-    
         // Event Listeners
-        saveButton.addEventListener("click", saveAppointment);
-        cancelButton.addEventListener("click", () => {
-            appointmentForm.style.display = "none";
-            editingAppointmentId = null;
+        document.getElementById("addAppointmentBtn").addEventListener("click", () => {
+            appointmentForm.style.display = "block"; // Show form
+            populatePatientDropdown();
+            saveButton.textContent = "Save"; // Set button text for adding new appointment
         });
+    
+        saveButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            saveAppointment();
+        });
+    
+        cancelButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            appointmentForm.style.display = "none"; // Hide form without saving
+        });
+    
+        tableBody.addEventListener("click", (e) => {
+            const id = e.target.getAttribute("data-id");
+            if (e.target.classList.contains("edit-btn")) {
+                // Populate form for editing
+                const record = appointments[id];
+                if (record) {
+                    document.getElementById("doctorName").value = record.appointment?.doctorName || "";
+                    document.getElementById("appointmentDate").value = record.appointment?.date || "";
+                    document.getElementById("appointmentTime").value = record.appointment?.time || "";
+                    patientSelect.value = id;
+                    appointmentForm.style.display = "block";
+                    saveButton.textContent = "Update"; // Set button text for editing
+                }
+            } else if (e.target.classList.contains("delete-btn")) {
+                deleteAppointment(id);
+            }
+        });   
+       
+
+        searchButton.addEventListener("click", () => {
+            const searchTerm = searchBar.value.trim();
+            renderAppointments(searchTerm); // Filter appointments
+        });
+        
+        searchBar.addEventListener("input", () => {
+            const searchTerm = searchBar.value.trim();
+            renderAppointments(searchTerm); // Update table as user types
+        });
+
+
+    
+        // Initial rendering
+        populatePatientDropdown();
+        renderAppointments();
     });
-    
-    
+
+
+   
+
+
