@@ -188,3 +188,50 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Attach event listener to the search bar
     document.getElementById("searchBar").addEventListener("input", searchPatient);
+
+    // Validation for update form:
+
+    document.getElementById("saveChanges").addEventListener("click", function(event) {
+        // Get form values
+        const serviceDescription = document.getElementById("serviceDescription").value.trim();
+        const amount = document.getElementById("Amount").value.trim();
+        const status = document.getElementById("status").value.trim().toLowerCase(); // Normalize input
+        
+        let isValid = true;
+    
+        // Clear previous errors
+        document.getElementById("serviceDescriptionError").innerText = "";
+        document.getElementById("amountError").innerText = "";
+        document.getElementById("statusError").innerText = "";
+    
+        // Service Description validation (no numbers or special characters)
+        if (!/^[A-Za-z\s]+$/.test(serviceDescription)) {
+            document.getElementById("serviceDescriptionError").innerText = "Only letters and spaces allowed.";
+            isValid = false;
+        }
+    
+        // Amount validation (only digits, optional decimal with up to 2 places)
+        if (!/^\d+(\.\d{1,2})?$/.test(amount)) {
+            document.getElementById("amountError").innerText = "Amount must be a valid number (e.g., 100 or 100.50).";
+            isValid = false;
+        }
+    
+        // Status validation (only 'Paid' or 'Unpaid', case-insensitive)
+        if (status !== "paid" && status !== "unpaid") {
+            document.getElementById("statusError").innerText = "Status must be 'Paid' or 'Unpaid'.";
+            isValid = false;
+        }
+    
+        // Prevent saving if validation fails
+        if (!isValid) {
+            event.preventDefault();
+            return;
+        }
+    
+        // Normalize status to have first letter uppercase
+        document.getElementById("status").value = status.charAt(0).toUpperCase() + status.slice(1);
+    
+        console.log("Form is valid, saving changes...");
+    });
+    
+    
