@@ -73,22 +73,32 @@
                     </table>
                 </div>
 
-
                 <div id="updateModal" class="modal" style="display: none;">
                     <div class="modal-content">
                         <span id="closeModal" class="close">&times;</span>
                         <h2>Update Billing Information</h2>
+                        
                         <label for="serviceDescription">Service Description:</label>
-                        <input type="text" id="serviceDescription" /><br/>
+                        <input type="text" id="serviceDescription" /><br />
+                        <small id="serviceDescriptionError" class="error-message"></small><br />
+                
                         <label for="status">Status:</label>
-                        <input type="text" id="status" /><br/>
+                        <input type="text" id="status" /><br />
+                        <small id="statusError" class="error-message"></small><br />
+                
                         <label for="date">Date:</label>
-                        <input type="date" id="date" /><br/>
+                        <input type="date" id="date" /><br />
+                        <small id="dateError" class="error-message"></small><br />
+                
                         <label for="Amount">Amount:</label>
-                        <input type="number" id="Amount"><br/>
+                        <input type="number" id="Amount"><br />
+                        <small id="amountError" class="error-message"></small><br />
+                
                         <button id="saveChanges">Save Changes</button>
                     </div>
                 </div>
+                
+                
         </section>
     </main>
     <script type="module" src="../js/Billing.js"></script>
